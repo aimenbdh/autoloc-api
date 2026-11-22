@@ -1,6 +1,7 @@
 
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Client {
     private LocalDate dateInscription;
 
     // Association Client - Reservation
+    @JsonIgnore
     @OneToMany(
             mappedBy = "client",
             cascade = CascadeType.PERSIST,

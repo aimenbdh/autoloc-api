@@ -1,6 +1,7 @@
 
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class Reservation {
     private Vehicule vehicule;
 
     // Une réservation possède au maximum un contrat
+    @JsonIgnore
     @OneToOne(
             mappedBy = "reservation",
             cascade = CascadeType.ALL,

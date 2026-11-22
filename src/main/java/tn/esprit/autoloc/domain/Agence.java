@@ -1,6 +1,7 @@
 
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Agence {
     private String telephone;
 
     // Une agence possède plusieurs véhicules
+    @JsonIgnore
     @OneToMany(
             mappedBy = "agence",
             fetch = FetchType.LAZY
@@ -34,6 +36,7 @@ public class Agence {
     private List<Vehicule> vehicules = new ArrayList<>();
 
     // Une agence possède plusieurs employés
+    @JsonIgnore
     @OneToMany(
             mappedBy = "agence",
             fetch = FetchType.LAZY

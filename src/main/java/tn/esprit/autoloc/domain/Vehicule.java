@@ -1,6 +1,7 @@
 
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,6 +52,7 @@ public class Vehicule {
     private Agence agence;
 
     // Un véhicule possède plusieurs maintenances
+    @JsonIgnore
     @OneToMany(
             mappedBy = "vehicule",
             cascade = CascadeType.PERSIST,
@@ -59,6 +61,7 @@ public class Vehicule {
     private List<Maintenance> maintenances = new ArrayList<>();
 
     // Un véhicule peut avoir plusieurs réservations
+    @JsonIgnore
     @OneToMany(
             mappedBy = "vehicule",
             fetch = FetchType.LAZY
