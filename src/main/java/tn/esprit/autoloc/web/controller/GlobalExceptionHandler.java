@@ -1,6 +1,8 @@
 package tn.esprit.autoloc.web.controller;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,7 +16,8 @@ import java.util.Map;
 
 /**
  * Traduit les exceptions de la couche service en reponses HTTP lisibles :
- * ResourceNotFoundException -> 404, IllegalArgumentException -> 400.
+ * ResourceNotFoundException -> 404, IllegalArgumentException / validation / JSON illisible -> 400,
+ * violation de contrainte en base (doublon, suppression bloquee par une cle etrangere) -> 409.
  * Corps JSON : statut, message, horodatage.
  */
 @RestControllerAdvice
@@ -41,6 +44,20 @@ public class GlobalExceptionHandler {
                 construire(HttpStatus.BAD_REQUEST, "Données invalides");
         reponse.getBody().put("erreurs", erreurs);
         return reponse;
+    }
+
+    // JSON mal forme, date hors format AAAA-MM-JJ, valeur d'enumeration inconnue...
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> handleJsonIllisible(HttpMessageNotReadableException ex) {
+        return construire(HttpStatus.BAD_REQUEST,
+                "Corps JSON illisible : vérifiez la syntaxe, les dates (AAAA-MM-JJ) et les valeurs d'énumération");
+    }
+
+    // Contrainte de la base : valeur unique deja utilisee, ou element encore reference par un autre
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleConflit(DataIntegrityViolationException ex) {
+        return construire(HttpStatus.CONFLICT,
+                "Opération impossible : valeur déjà utilisée ou élément encore lié à d'autres données");
     }
 
     private ResponseEntity<Map<String, Object>> construire(HttpStatus statut, String message) {

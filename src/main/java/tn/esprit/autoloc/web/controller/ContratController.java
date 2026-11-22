@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.domain.Contrat;
 import tn.esprit.autoloc.service.IContratService;
+import tn.esprit.autoloc.service.IVehiculeService;
+import tn.esprit.autoloc.web.dto.VehiculeDTO;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ import java.util.List;
 public class ContratController {
 
     private final IContratService contratService;
+    private final IVehiculeService vehiculeService;
 
     @Operation(summary = "Lister les contrats")
     @ApiResponse(responseCode = "200", description = "Liste des contrats")
@@ -59,6 +62,16 @@ public class ContratController {
     public Contrat update(@Parameter(description = "Identifiant du contrat") @PathVariable Long id,
                       @RequestBody Contrat contrat) {
         return contratService.update(id, contrat);
+    }
+
+    @Operation(summary = "Lister les véhicules d'un contrat")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicules du contrat (liste vide si le contrat n'a pas de réservation)"),
+            @ApiResponse(responseCode = "404", description = "Contrat introuvable")
+    })
+    @GetMapping("/{id}/vehicules")
+    public List<VehiculeDTO> findVehicules(@Parameter(description = "Identifiant du contrat") @PathVariable Long id) {
+        return vehiculeService.findByContrat(id).stream().map(VehiculeDTO::fromEntity).toList();
     }
 
     @Operation(summary = "Supprimer un contrat")

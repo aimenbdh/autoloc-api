@@ -10,8 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.domain.Vehicule;
+import tn.esprit.autoloc.service.IContratService;
+import tn.esprit.autoloc.service.IMaintenanceService;
 import tn.esprit.autoloc.service.IVehiculeService;
 import tn.esprit.autoloc.web.dto.AffectationVehiculeEquipementRequest;
+import tn.esprit.autoloc.web.dto.ContratDTO;
+import tn.esprit.autoloc.web.dto.MaintenanceDTO;
 import tn.esprit.autoloc.web.dto.VehiculeEquipementsDTO;
 
 import java.util.List;
@@ -23,6 +27,8 @@ import java.util.List;
 public class VehiculeController {
 
     private final IVehiculeService vehiculeService;
+    private final IContratService contratService;
+    private final IMaintenanceService maintenanceService;
 
     @Operation(summary = "Lister les vehicules")
     @ApiResponse(responseCode = "200", description = "Liste des vehicules")
@@ -75,6 +81,26 @@ public class VehiculeController {
     public VehiculeEquipementsDTO affecterEquipement(@Valid @RequestBody AffectationVehiculeEquipementRequest request) {
         return VehiculeEquipementsDTO.fromEntity(
                 vehiculeService.affecterEquipement(request.idVehicule(), request.idEquipement()));
+    }
+
+    @Operation(summary = "Lister les contrats d'un véhicule")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Contrats du véhicule"),
+            @ApiResponse(responseCode = "404", description = "Véhicule introuvable")
+    })
+    @GetMapping("/{id}/contrats")
+    public List<ContratDTO> findContrats(@Parameter(description = "Identifiant du véhicule") @PathVariable Long id) {
+        return contratService.findByVehicule(id).stream().map(ContratDTO::fromEntity).toList();
+    }
+
+    @Operation(summary = "Lister les maintenances d'un véhicule")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Maintenances du véhicule"),
+            @ApiResponse(responseCode = "404", description = "Véhicule introuvable")
+    })
+    @GetMapping("/{id}/maintenances")
+    public List<MaintenanceDTO> findMaintenances(@Parameter(description = "Identifiant du véhicule") @PathVariable Long id) {
+        return maintenanceService.findByVehicule(id).stream().map(MaintenanceDTO::fromEntity).toList();
     }
 
     @Operation(summary = "Supprimer un véhicule")

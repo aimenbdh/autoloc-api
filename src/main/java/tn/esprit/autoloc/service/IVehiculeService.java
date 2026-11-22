@@ -18,4 +18,9 @@ public interface IVehiculeService {
 
     // Atelier 6 : affecter un equipement a un vehicule
     Vehicule affecterEquipement(Long idVehicule, Long idEquipement);
+
+    // Atelier 7
+    List<Vehicule> findByContrat(Long idContrat);
+
+    List<Vehicule> findByMaintenance(Long idMaintenance);
 }

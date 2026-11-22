@@ -11,8 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.domain.Maintenance;
 import tn.esprit.autoloc.service.IMaintenanceService;
+import tn.esprit.autoloc.service.IVehiculeService;
 import tn.esprit.autoloc.web.dto.AffectationMaintenanceVehiculeRequest;
 import tn.esprit.autoloc.web.dto.MaintenanceDTO;
+import tn.esprit.autoloc.web.dto.VehiculeDTO;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ import java.util.List;
 public class MaintenanceController {
 
     private final IMaintenanceService maintenanceService;
+    private final IVehiculeService vehiculeService;
 
     @Operation(summary = "Lister les maintenances")
     @ApiResponse(responseCode = "200", description = "Liste des maintenances")
@@ -75,6 +78,16 @@ public class MaintenanceController {
     public MaintenanceDTO affecterVehicule(@Valid @RequestBody AffectationMaintenanceVehiculeRequest request) {
         return MaintenanceDTO.fromEntity(
                 maintenanceService.affecterVehicule(request.idMaintenance(), request.idVehicule()));
+    }
+
+    @Operation(summary = "Lister les véhicules d'une maintenance")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicule(s) de la maintenance"),
+            @ApiResponse(responseCode = "404", description = "Maintenance introuvable")
+    })
+    @GetMapping("/{id}/vehicules")
+    public List<VehiculeDTO> findVehicules(@Parameter(description = "Identifiant de la maintenance") @PathVariable Long id) {
+        return vehiculeService.findByMaintenance(id).stream().map(VehiculeDTO::fromEntity).toList();
     }
 
     @Operation(summary = "Supprimer une maintenance")

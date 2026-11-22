@@ -18,4 +18,7 @@ public interface IMaintenanceService {
 
     // Atelier 6 : affecter une maintenance a un vehicule
     Maintenance affecterVehicule(Long idMaintenance, Long idVehicule);
+
+    // Atelier 7
+    List<Maintenance> findByVehicule(Long idVehicule);
 }

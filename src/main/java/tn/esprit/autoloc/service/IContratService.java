@@ -15,4 +15,7 @@ public interface IContratService {
     Contrat update(Long id, Contrat contrat);
 
     void deleteById(Long id);
+
+    // Atelier 7
+    List<Contrat> findByVehicule(Long idVehicule);
 }
