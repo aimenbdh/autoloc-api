@@ -15,4 +15,7 @@ public interface IVehiculeService {
     Vehicule update(Long id, Vehicule vehicule);
 
     void deleteById(Long id);
+
+    // Atelier 6 : affecter un equipement a un vehicule
+    Vehicule affecterEquipement(Long idVehicule, Long idEquipement);
 }

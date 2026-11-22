@@ -5,11 +5,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.domain.Maintenance;
 import tn.esprit.autoloc.service.IMaintenanceService;
+import tn.esprit.autoloc.web.dto.AffectationMaintenanceVehiculeRequest;
+import tn.esprit.autoloc.web.dto.MaintenanceDTO;
 
 import java.util.List;
 
@@ -59,6 +62,19 @@ public class MaintenanceController {
     public Maintenance update(@Parameter(description = "Identifiant de la maintenance") @PathVariable Long id,
                       @RequestBody Maintenance maintenance) {
         return maintenanceService.update(id, maintenance);
+    }
+
+    @Operation(summary = "Affecter une maintenance à un véhicule",
+            description = "Atelier 6 : corps validé par le validator, réponse sous forme de DTO")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Maintenance affectée au véhicule"),
+            @ApiResponse(responseCode = "400", description = "Champs invalides (identifiant manquant ou non positif)"),
+            @ApiResponse(responseCode = "404", description = "Maintenance ou véhicule introuvable")
+    })
+    @PutMapping("/affectation-vehicule")
+    public MaintenanceDTO affecterVehicule(@Valid @RequestBody AffectationMaintenanceVehiculeRequest request) {
+        return MaintenanceDTO.fromEntity(
+                maintenanceService.affecterVehicule(request.idMaintenance(), request.idVehicule()));
     }
 
     @Operation(summary = "Supprimer une maintenance")

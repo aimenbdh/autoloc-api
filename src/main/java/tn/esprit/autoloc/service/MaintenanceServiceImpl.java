@@ -3,6 +3,8 @@ package tn.esprit.autoloc.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tn.esprit.autoloc.domain.Vehicule;
 
 import tn.esprit.autoloc.domain.Maintenance;
 import tn.esprit.autoloc.exception.ResourceNotFoundException;
@@ -15,6 +17,7 @@ import java.util.List;
 public class MaintenanceServiceImpl implements IMaintenanceService {
 
     private final IMaintenanceRepository maintenanceRepository;
+    private final IVehiculeService vehiculeService;
 
     @Override
     public Maintenance create(Maintenance maintenance) {
@@ -58,6 +61,15 @@ public class MaintenanceServiceImpl implements IMaintenanceService {
         Maintenance existante = findById(id);
 
         maintenanceRepository.delete(existante);
+    }
+
+    @Override
+    @Transactional
+    public Maintenance affecterVehicule(Long idMaintenance, Long idVehicule) {
+        Maintenance maintenance = findById(idMaintenance);          // 404 si absente
+        Vehicule vehicule = vehiculeService.findById(idVehicule);   // 404 si absent
+        maintenance.setVehicule(vehicule);
+        return maintenanceRepository.save(maintenance);
     }
 
     private void valider(Maintenance maintenance) {

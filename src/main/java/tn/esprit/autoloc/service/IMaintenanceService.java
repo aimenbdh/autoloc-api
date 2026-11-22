@@ -15,4 +15,7 @@ public interface IMaintenanceService {
     Maintenance update(Long id, Maintenance maintenance);
 
     void deleteById(Long id);
+
+    // Atelier 6 : affecter une maintenance a un vehicule
+    Maintenance affecterVehicule(Long idMaintenance, Long idVehicule);
 }
