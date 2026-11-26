@@ -23,4 +23,9 @@ public interface IVehiculeService {
     List<Vehicule> findByContrat(Long idContrat);
 
     List<Vehicule> findByMaintenance(Long idMaintenance);
+
+    // Atelier 8
+    List<Vehicule> findByMaintenanceJpql(Long idMaintenance);
+
+    List<Vehicule> findByMaintenanceSql(Long idMaintenance);
 }

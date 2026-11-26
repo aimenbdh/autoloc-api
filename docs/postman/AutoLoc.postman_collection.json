@@ -2976,6 +2976,200 @@
       ]
     },
     {
+      "name": "Atelier 8 - JPQL et SQL natif (avant les suppressions)",
+      "item": [
+        {
+          "name": "Véhicules d'une maintenance (JPQL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Le véhicule de la maintenance\", () => pm.expect(pm.response.json()[0].idVehicule).to.eql(pm.environment.get(\"vehiculeId\")));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/maintenances/{{maintenanceId}}/vehicules/jpql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maintenances",
+                "{{maintenanceId}}",
+                "vehicules",
+                "jpql"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Véhicules d'une maintenance (SQL natif)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Le véhicule de la maintenance\", () => pm.expect(pm.response.json()[0].idVehicule).to.eql(pm.environment.get(\"vehiculeId\")));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/maintenances/{{maintenanceId}}/vehicules/sql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maintenances",
+                "{{maintenanceId}}",
+                "vehicules",
+                "sql"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Véhicules d'une maintenance inexistante (JPQL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/maintenances/9999/vehicules/jpql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maintenances",
+                "9999",
+                "vehicules",
+                "jpql"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Véhicules d'une maintenance inexistante (SQL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/maintenances/9999/vehicules/sql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "maintenances",
+                "9999",
+                "vehicules",
+                "sql"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Maintenances d'un véhicule (JPQL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Contient la maintenance\", () => pm.expect(pm.response.json().map(m => m.idMaintenance)).to.include(pm.environment.get(\"maintenanceId\")));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vehicules/{{vehiculeId}}/maintenances/jpql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vehicules",
+                "{{vehiculeId}}",
+                "maintenances",
+                "jpql"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Maintenances d'un véhicule inexistant (JPQL)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Statut 404\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vehicules/9999/maintenances/jpql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "vehicules",
+                "9999",
+                "maintenances",
+                "jpql"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Suppressions (à lancer en dernier)",
       "item": [
         {

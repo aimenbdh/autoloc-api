@@ -21,4 +21,7 @@ public interface IMaintenanceService {
 
     // Atelier 7
     List<Maintenance> findByVehicule(Long idVehicule);
+
+    // Atelier 8
+    List<Maintenance> findByVehiculeJpql(Long idVehicule);
 }

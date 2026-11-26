@@ -110,6 +110,25 @@ public class VehiculeServiceImpl implements IVehiculeService {
         return vehiculeRepository.findByMaintenances_IdMaintenance(idMaintenance);
     }
 
+    // Atelier 8
+    @Override
+    public List<Vehicule> findByMaintenanceJpql(Long idMaintenance) {
+        verifierMaintenance(idMaintenance);
+        return vehiculeRepository.findVehiculesByMaintenanceIdJpql(idMaintenance);
+    }
+
+    @Override
+    public List<Vehicule> findByMaintenanceSql(Long idMaintenance) {
+        verifierMaintenance(idMaintenance);
+        return vehiculeRepository.findVehiculesByMaintenanceIdSql(idMaintenance);
+    }
+
+    private void verifierMaintenance(Long idMaintenance) {
+        if (!maintenanceRepository.existsById(idMaintenance)) {
+            throw new ResourceNotFoundException("Maintenance", idMaintenance);
+        }
+    }
+
     private void valider(Vehicule vehicule) {
         if (vehicule.getImmatriculation() == null || vehicule.getImmatriculation().isBlank()) {
             throw new IllegalArgumentException("L'immatriculation est obligatoire");

@@ -76,6 +76,13 @@ public class MaintenanceServiceImpl implements IMaintenanceService {
         return maintenanceRepository.findByVehicule_IdVehicule(idVehicule);
     }
 
+    // Atelier 8
+    @Override
+    public List<Maintenance> findByVehiculeJpql(Long idVehicule) {
+        vehiculeService.findById(idVehicule);   // 404 si le vehicule n'existe pas
+        return maintenanceRepository.findMaintenancesByVehiculeIdJpql(idVehicule);
+    }
+
     private void valider(Maintenance maintenance) {
         if (maintenance.getDateDebut() == null || maintenance.getDateFin() == null) {
             throw new IllegalArgumentException("Les dates de maintenance sont obligatoires");

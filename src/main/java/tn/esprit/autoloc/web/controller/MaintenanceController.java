@@ -90,6 +90,26 @@ public class MaintenanceController {
         return vehiculeService.findByMaintenance(id).stream().map(VehiculeDTO::fromEntity).toList();
     }
 
+    @Operation(summary = "Lister les véhicules d'une maintenance (JPQL)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicule(s) de la maintenance"),
+            @ApiResponse(responseCode = "404", description = "Maintenance introuvable")
+    })
+    @GetMapping("/{id}/vehicules/jpql")
+    public List<VehiculeDTO> findVehiculesJpql(@Parameter(description = "Identifiant de la maintenance") @PathVariable Long id) {
+        return vehiculeService.findByMaintenanceJpql(id).stream().map(VehiculeDTO::fromEntity).toList();
+    }
+
+    @Operation(summary = "Lister les véhicules d'une maintenance (SQL natif)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Véhicule(s) de la maintenance"),
+            @ApiResponse(responseCode = "404", description = "Maintenance introuvable")
+    })
+    @GetMapping("/{id}/vehicules/sql")
+    public List<VehiculeDTO> findVehiculesSql(@Parameter(description = "Identifiant de la maintenance") @PathVariable Long id) {
+        return vehiculeService.findByMaintenanceSql(id).stream().map(VehiculeDTO::fromEntity).toList();
+    }
+
     @Operation(summary = "Supprimer une maintenance")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Maintenance supprimée"),
